@@ -8,7 +8,7 @@ import "./Erc20.sol";
 contract Forwarder {
   // Address to which any funds sent to this contract will be forwarded
   address payable public destination;
-  bool inititalised = false;
+  bool public inititalised = false;
 
   event ForwarderDeposited(address from, uint value, bytes data);
   event TokensFlushed(address forwarderAddress, uint value, address tokenContractAddress);
@@ -17,7 +17,7 @@ contract Forwarder {
    * Create the contract, and sets the destination address to that of the creator
    * set initialised true for the default forwarder on normal contract deployment
    */
-  constructor() {
+  constructor() payable {
     destination = msg.sender;
     inititalised = true;
   }
@@ -29,6 +29,7 @@ contract Forwarder {
     }
     _;
   }
+  
   //if forwarder is deployed.. forward the payment straight away
   receive() external payable {
      destination.transfer(msg.value);
@@ -44,7 +45,7 @@ contract Forwarder {
   }
   
   function changeDestination(address payable newDestination) public onlyDestination{
-      destination = newDestination;
+      destination = payable(newDestination);
   }
 
   //flush the tokens
@@ -64,6 +65,10 @@ contract Forwarder {
     address payable thisContract = address(this);
     destination.transfer(thisContract.balance);
   }
+
+  function getValueOfAddress(address _address) public view returns(uint256){
+    return _address.balance;
+  }
   
   //simple withdraw instead of flush
   function withdraw() payable external onlyDestination{
@@ -71,4 +76,3 @@ contract Forwarder {
       msg.sender.transfer(thisContract.balance);
   }
 }
-
