@@ -76,3 +76,51 @@ contract Forwarder {
       msg.sender.transfer(thisContract.balance);
   }
 }
+
+
+/*
+pragma solidity >=0.5.0 <0.8.0;
+import "../Erc20.sol";
+
+contract Demo1{
+    //Address to which any funds sent to this contract will be forwarded
+    address payable public destination;
+    bool public inititalised = false;
+
+    event ForwarderDeposited(address from, uint value, bytes data);
+    event TokensFlushed(address forwarderAddress, uint value, address tokenContractAddress);
+
+    constructor() payable public {
+        destination = msg.sender;
+        inititalised = true;
+    }
+
+     //if forwarder is deployed.. forward the payment straight away
+    receive() external payable {
+        destination.transfer(msg.value);
+        emit ForwarderDeposited(msg.sender, msg.value, msg.data);
+    }
+
+    function getData(address _address) public view returns(uint256){
+        return _address.balance;
+    } 
+
+//     receive() external payable {
+//      destination.transfer(msg.value);
+//      emit ForwarderDeposited(msg.sender, msg.value, msg.data);
+//   }
+    // address payable public myAdddress;
+     
+    // constructor()payable public{
+    //     myAdddress = msg.sender;
+    // }
+
+    // function data() public payable {
+    //     myAdddress.transfer(msg.value);
+    // }
+
+    // function getData(address _address) public view returns(uint256){
+    //     return _address.balance;
+    // } 
+}
+*/

@@ -39,5 +39,4 @@ contract ForwarderFactory {
          forwarder.flush();
       }
   }
-
 }
